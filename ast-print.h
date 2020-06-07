@@ -3,7 +3,7 @@
 
 #include <ostream>
 #include <memory>
-#include <vector>
+#include <list>
 #include <type_traits>
 
 #include "terminalcolor.h"
@@ -69,6 +69,7 @@ public:
 
 class Printable {
 public:
+    virtual ~Printable() = default;
     virtual void printTo(PrintStream &stream) const = 0;
 };
 
@@ -88,7 +89,7 @@ void printNamedPrintable(const NamedPrintable<T> &np, PrintStream &stream) {
     stream.decreaseIndent();
 }
 
-template <typename T, typename std::enable_if_t<is_specialization<std::decay_t<T>, std::vector>::value>* = nullptr>
+template <typename T, typename std::enable_if_t<is_specialization<std::decay_t<T>, std::list>::value>* = nullptr>
 void printNamedPrintable(const NamedPrintable<T> &np, PrintStream &stream) {
     if (np.printable.size() > 0) {
         stream.stream << std::endl;

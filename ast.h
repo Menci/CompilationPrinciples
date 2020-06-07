@@ -2,10 +2,12 @@
 #define _MENCI_AST_H
 
 #include <string>
-#include <vector>
+#include <list>
 #include <memory>
 
 #include "ast-print.h"
+
+namespace AST {
 
 struct Program;
 struct Block;
@@ -45,14 +47,16 @@ enum class BinaryOperator {
     GreaterThan,
     LessThanOrEqual,
     GreaterThanOrEqual,
+
     Plus,
     Minus,
-    Or,
-    Xor,
     Times,
     Slash,
+
     Div,
     Mod,
+    Or,
+    Xor,
     And,
     LeftShift,
     RightShift
@@ -136,10 +140,10 @@ struct Program : Printable {
 struct Block : Printable {
     std::weak_ptr<Block> parentBlock;
 
-    std::vector<std::shared_ptr<Constant>> constants;
-    std::vector<std::shared_ptr<TypeAlias>> typeAliases;
-    std::vector<std::shared_ptr<Variable>> variables;
-    std::vector<std::shared_ptr<Callable>> callables;
+    std::list<std::shared_ptr<Constant>> constants;
+    std::list<std::shared_ptr<TypeAlias>> typeAliases;
+    std::list<std::shared_ptr<Variable>> variables;
+    std::list<std::shared_ptr<Callable>> callables;
     std::shared_ptr<Statement> statement;
 
     Block(std::shared_ptr<Block> parentBlock) : parentBlock(parentBlock) {}
@@ -191,9 +195,9 @@ struct Variable : Printable {
 struct Type : Printable {};
 
 struct RecordType : Type {
-    std::vector<std::shared_ptr<Variable>> variables;
+    std::list<std::shared_ptr<Variable>> variables;
 
-    RecordType(std::vector<std::shared_ptr<Variable>> &&variables) : variables(variables) {}
+    RecordType(std::list<std::shared_ptr<Variable>> &&variables) : variables(variables) {}
 
     void printTo(PrintStream &s) const {
         s << PRINT(variables);
@@ -213,9 +217,11 @@ struct TypeIdentifier : TypeInDeclaration {
 };
 
 struct ArraySchema : TypeInDeclaration {
-    std::vector<std::shared_ptr<ArrayDimensionalBound>> bounds;
+    std::list<std::shared_ptr<ArrayDimensionalBound>> bounds;
+    std::string memberType;
 
-    ArraySchema(std::vector<std::shared_ptr<ArrayDimensionalBound>> &&bounds) : bounds(bounds) {}
+    ArraySchema(std::list<std::shared_ptr<ArrayDimensionalBound>> &&bounds, const std::string &memberType)
+    : bounds(bounds), memberType(memberType) {}
 
     void printTo(PrintStream &s) const {
         s << PRINT(bounds);
@@ -243,13 +249,28 @@ struct PointerType : TypeInDeclaration {
     }
 };
 
+struct Parameter : Printable {
+    std::string name;
+    std::shared_ptr<TypeInDeclaration> type;
+    bool passByReference;
+
+    Parameter(const std::string &name, std::shared_ptr<TypeInDeclaration> type, bool passByReference)
+    : name(name), type(type), passByReference(passByReference) {}
+
+    void printTo(PrintStream &s) const {
+        s << PRINT(name);
+        s << PRINT(type);
+        s << PRINT(passByReference);
+    }
+};
+
 struct Callable : Printable {
     std::string name;
-    std::vector<std::shared_ptr<Variable>> parameters;
+    std::list<std::shared_ptr<Parameter>> parameters;
     std::string returnType;
     std::shared_ptr<Block> block;
 
-    Callable(const std::string &name, std::vector<std::shared_ptr<Variable>> &&parameters, std::string returnType, std::shared_ptr<Block> block)
+    Callable(const std::string &name, std::list<std::shared_ptr<Parameter>> &&parameters, std::string returnType, std::shared_ptr<Block> block)
     : name(name), parameters(parameters), returnType(returnType), block(block) {}
 
     void printTo(PrintStream &s) const {
@@ -285,9 +306,9 @@ struct ExplicitCallStatement : Statement {
 };
 
 struct CompoundStatement : Statement {
-    std::vector<std::shared_ptr<Statement>> statements;
+    std::list<std::shared_ptr<Statement>> statements;
 
-    CompoundStatement(std::vector<std::shared_ptr<Statement>> statements) : statements(statements) {}
+    CompoundStatement(std::list<std::shared_ptr<Statement>> statements) : statements(statements) {}
 
     void printTo(PrintStream &s) const {
         s << PRINT(statements);
@@ -402,9 +423,9 @@ struct RecordAccessExpression : MaybeLeftValueExpression {
 
 struct ArrayAccessExpression : MaybeLeftValueExpression {
     std::shared_ptr<MaybeLeftValueExpression> array;
-    std::vector<std::shared_ptr<Expression>> indexes;
+    std::list<std::shared_ptr<Expression>> indexes;
 
-    ArrayAccessExpression(std::shared_ptr<MaybeLeftValueExpression> array, std::vector<std::shared_ptr<Expression>> indexes)
+    ArrayAccessExpression(std::shared_ptr<MaybeLeftValueExpression> array, std::list<std::shared_ptr<Expression>> indexes)
     : array(array), indexes(indexes) {}
 
     void printTo(PrintStream &s) const {
@@ -461,9 +482,9 @@ struct UnaryOperatorExpression : Expression {
 
 struct CallExpressionWithArguments : Expression {
     std::string functionName;
-    std::vector<std::shared_ptr<Expression>> argumentList;
+    std::list<std::shared_ptr<Expression>> argumentList;
 
-    CallExpressionWithArguments(std::string functionName, std::vector<std::shared_ptr<Expression>> argumentList)
+    CallExpressionWithArguments(std::string functionName, std::list<std::shared_ptr<Expression>> argumentList)
     : functionName(functionName), argumentList(argumentList) {}
 
     void printTo(PrintStream &s) const {
@@ -471,5 +492,7 @@ struct CallExpressionWithArguments : Expression {
         s << PRINT(argumentList);
     }
 };
+
+}
 
 #endif // _MENCI_AST_H

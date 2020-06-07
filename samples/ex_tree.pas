@@ -1,17 +1,16 @@
 program bit;
-const
-    MAXN = 100000;
-
+const a = 1; b = 2;
+type aaa = integer; bbb = string;
 var
-    a: array[1..MAXN] of longint;
-    n: longint;
+    a: array[1..100000] of integer;
+    n: integer;
 
-function lowbit(x: longint): longint;
+function lowbit(x: integer): integer;
 begin
-    exit(x and -x);
+    lowbit := x and -x;
 end;
 
-procedure update(pos, x: longint);
+procedure update(pos, x: integer);
 begin
     while pos <= n do
     begin
@@ -20,9 +19,9 @@ begin
     end;
 end;
 
-function query(pos: longint): longint;
+function queryprefix(pos: integer): integer;
 var
-    ans: longint;
+    ans: integer;
 
 begin
     ans := 0;
@@ -30,20 +29,18 @@ begin
     begin
         ans := ans + a[pos];
         pos := pos - lowbit(pos);
-        ans := '123456';
-        ans := '123456''789aaa'
     end;
-    exit(ans);
+    queryprefix := ans;
 end;
 
-function query(l, r: longint): longint;
+function query(l, r: integer): integer;
 begin
-    exit(query(r) - query(l - 1));
+    query := queryprefix(r) - queryprefix(l - 1);
 end;
 
 procedure main;
 var
-    m, i, x, t, a, b: longint;
+    m, i, x, t, a, b: integer;
 
 begin
     read(n);
@@ -56,7 +53,9 @@ begin
     read(m);
     for i := 1 to m do
     begin
-        read(t, a, b);
+        read(t);
+        read(a);
+        read(b);
         if t = 1 then
         begin
             update(a, b);

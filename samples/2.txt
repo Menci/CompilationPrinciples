@@ -1,0 +1,12 @@
+var a,b;
+procedure p;
+	var a;
+	procedure q;
+		read(a);
+	call q;
+procdure q;
+	var a;
+	procedure p;
+		read(a);
+	call p;
+call p.

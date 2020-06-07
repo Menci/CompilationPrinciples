@@ -5,7 +5,7 @@ procedure rec;
 begin
     if n <> 0 then
         begin
-            write(n);
+            writeln(n);
             n := n - 1;
             call rec;
         end;

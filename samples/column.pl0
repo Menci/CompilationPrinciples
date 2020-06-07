@@ -9,8 +9,8 @@ begin
 	a2 := a1 + a1 + len * h;
 	volumn := a1 * h;
 	
-	write(len);
-	write(a1);
-	write(a2);
-	write(volumn);
+	writeln(len);
+	writeln(a1);
+	writeln(a2);
+	writeln(volumn);
 end.

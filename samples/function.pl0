@@ -12,5 +12,5 @@ else
 begin
     read(x);
     call function1;
-    write(y);
+    writeln(y);
 end.

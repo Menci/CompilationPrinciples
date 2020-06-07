@@ -23,12 +23,12 @@ begin
 	    end;
 end;
 
-procedure writedigit;
+procedure writelndigit;
 begin
     j := i;
     i := 1;
     repeat
-        write(digit[i]);
+        writeln(digit[i]);
         i := i + 1
     until digit[i] = 0;
     i := j;
@@ -52,9 +52,9 @@ begin
         begin
             call init;
             call parse;
-            write[i];
-            call writedigit;
+            writeln(i);
+            call writelndigit;
             call reverseit;
-            write(n);
+            writeln(n);
         end;
 end.

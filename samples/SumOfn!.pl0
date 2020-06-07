@@ -18,9 +18,9 @@ begin
             m := n;
             fact := 1;
             call factorial;
-            if fact > 20 then write (n);
+            if fact > 20 then writeln (n);
             sum  := sum + fact;
             n := n - 1;
         end;
-    write(sum);
+    writeln(sum);
 end.

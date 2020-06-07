@@ -12,22 +12,23 @@ YY_DECL;
 
 class Context {
 public:
-  Context() {}
+    Context() {}
 
-  bool parse(const std::string &f);
-  std::string file;
+    bool parse(const std::string &f);
+    std::string file;
 
-  bool traceScanning = false;
-  bool traceParsing = false;
+    bool traceScanning = false;
+    bool traceParsing = false;
+    bool printReduceRule = false;
 
-  // For scanner to open file
-  void initializeScanner();
+    // For scanner to open file
+    void initializeScanner();
 
-  yy::location location;
+    yy::location location;
 
-  std::shared_ptr<Program> program;
-  std::shared_ptr<Block> currentBlock;
-  std::stack<std::shared_ptr<Block>> blockStack;
+    std::shared_ptr<AST::Program> program;
+    std::shared_ptr<AST::Block> currentBlock;
+    std::stack<std::shared_ptr<AST::Block>> blockStack;
 };
 
 #endif // _MENCI_CONTEXT_H

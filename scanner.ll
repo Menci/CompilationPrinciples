@@ -41,6 +41,7 @@ String                   '(''|[^'])*'
 =            return yy::parser::make_O_EQ        (ctx.location);
 :=           return yy::parser::make_O_ASSIGN    (ctx.location);
 \<>          return yy::parser::make_O_NE        (ctx.location);
+#            return yy::parser::make_O_NE        (ctx.location);
 \<           return yy::parser::make_O_LT        (ctx.location);
 >            return yy::parser::make_O_GT        (ctx.location);
 \<=          return yy::parser::make_O_LE        (ctx.location);

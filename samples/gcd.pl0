@@ -22,6 +22,6 @@ begin
 
     begin
         call gcd;
-        write(m);
+        writeln(m);
     end;
 end.

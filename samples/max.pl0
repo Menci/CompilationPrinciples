@@ -14,7 +14,7 @@ begin
     then max := max
     else max := c;
 
-    write(max);
+    writeln(max);
 end;
 
 call P.

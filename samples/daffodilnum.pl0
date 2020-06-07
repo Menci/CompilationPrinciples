@@ -41,7 +41,7 @@ begin
             call parse;
             call sumdigit;
             if m = n then
-                write(n);
+                writeln(n);
             n := n + 1;
         end;
 end.
